@@ -1,0 +1,53 @@
+name: Build & Push Docker Image to ACR
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  IMAGE_NAME: gettasktodo
+  IMAGE_TAG: v1
+  ACR_NAME: azureaksregistry1
+  ACR_LOGIN_SERVER: azureaksregistry1.azurecr.io
+
+jobs:
+  build_and_push:  #job id
+    name: build and push #job name
+    runs-on: ubuntu-latest #runner and tag dena padta h
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6.0.2
+
+    - name: Azure Login
+      uses: Azure/login@v2.3.0
+      with:
+        # ClientId of the Azure Service principal created.
+        client-id: 24173b11-ec1b-4072-813a-0aa8e3e81acf
+        # TenantId of the Azure Service principal created.
+        tenant-id: 66c291b4-1789-4bcb-9817-6b0339a238bc
+        subscription-id: cef3b1fa-2c9d-4212-843c-0107fc35ca77
+
+    - name: Login to ACR
+      run: |
+        az acr login --name $ACR_NAME
+
+    - name: Build Docker image
+      run: |
+        docker build -t $IMAGE_NAME:$IMAGE_TAG .
+    
+    - name: Tag Docker Image for ACR
+      run: |
+        docker tag  $IMAGE_NAME:$IMAGE_TAG $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
+      
+    - name: Push Docker image to ACR
+      run: |
+        docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG 
+
+
