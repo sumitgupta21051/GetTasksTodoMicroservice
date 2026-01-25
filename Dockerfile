@@ -1,31 +1,29 @@
 FROM python:3.9-slim-bullseye
 
-
 WORKDIR /app
-
 COPY . .
-
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
-    gnupg \
+    gnupg2 \
+    apt-transport-https \
     unixodbc \
-    unixodbc-dev \
+    unixodbc-dev
+
+# Import Microsoft public key
+RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc \
+    | gpg --dearmor \
+    | tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
+
+# Add Microsoft SQL Server repo
+RUN curl -fsSL https://packages.microsoft.com/config/debian/11/prod.list \
+    -o /etc/apt/sources.list.d/mssql-release.list
+
+# Install msodbcsql17
+RUN apt-get update \
+    && ACCEPT_EULA=Y apt-get install -y msodbcsql17 \
     && rm -rf /var/lib/apt/lists/*
 
-# Add Microsoft GPG key (modern way)
-RUN curl https://packages.microsoft.com/keys/microsoft.asc \
-    | gpg --dearmor > /usr/share/keyrings/microsoft.gpg
-
-# Add Microsoft SQL Server repo (Debian 11)
-RUN curl https://packages.microsoft.com/config/debian/11/prod.list \
-    | tee /etc/apt/sources.list.d/mssql-release.list
-
-# Install MS ODBC Driver
-RUN apt-get update && ACCEPT_EULA=Y apt-get install -y msodbcsql17
-
-# Python deps (better caching)
-
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 
