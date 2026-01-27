@@ -12,7 +12,7 @@ permissions:
 
 env:
   IMAGE_NAME: gettasktodo
-  IMAGE_TAG: v1
+  IMAGE_TAG: v2
   ACR_NAME: acrrg1
   ACR_LOGIN_SERVER: acrrg1.azurecr.io
 
