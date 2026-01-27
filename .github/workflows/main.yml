@@ -13,8 +13,8 @@ permissions:
 env:
   IMAGE_NAME: gettasktodo
   IMAGE_TAG: v1
-  ACR_NAME: azureaksregistry1
-  ACR_LOGIN_SERVER: azureaksregistry1.azurecr.io
+  ACR_NAME: acrrg1
+  ACR_LOGIN_SERVER: acrrg1.azurecr.io
 
 jobs:
   build_and_push:  #job id
