@@ -12,9 +12,9 @@ permissions:
 
 env:
   IMAGE_NAME: gettasktodo
-  IMAGE_TAG: v2
-  ACR_NAME: acrrg1
-  ACR_LOGIN_SERVER: acrrg1.azurecr.io
+  IMAGE_TAG: v1
+  ACR_NAME: acrrg2
+  ACR_LOGIN_SERVER: acrrg2.azurecr.io
 
 jobs:
   build_and_push:  #job id
@@ -29,11 +29,11 @@ jobs:
       uses: Azure/login@v2.3.0
       with:
         # ClientId of the Azure Service principal created.
-        client-id: 24173b11-ec1b-4072-813a-0aa8e3e81acf
+        client-id: 9750216e-9277-49dd-8678-cf59643ecc6b
         # TenantId of the Azure Service principal created.
-        tenant-id: 66c291b4-1789-4bcb-9817-6b0339a238bc
-        subscription-id: cef3b1fa-2c9d-4212-843c-0107fc35ca77
-
+        tenant-id: d37aee34-5a74-406c-b715-bf65c026f58b
+        subscription-id: 580eec40-34b7-4c9b-ba06-bd14c2347042
+    
     - name: Login to ACR
       run: |
         az acr login --name $ACR_NAME
