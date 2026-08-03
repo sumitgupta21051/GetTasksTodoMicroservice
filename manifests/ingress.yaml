@@ -2,10 +2,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: get-task-ingress
-  annotations:
-    kubernetes.io/ingress.class: nginx
+
 spec:
-  ingressClassName: nginx
+  ingressClassName: azure-application-gateway
   rules:
   - host: gettask.devops-engineer-adda.store
     http:
